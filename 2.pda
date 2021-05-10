@@ -1,11 +1,18 @@
 start: q0
-accepting: { q4, qEP }
+accepting: { q2, qEP }
 
-q0 ( _ , _ -> $ , q1a) 
-q1a ( a , _ -> a, q1) ( = , _ -> _ , qE)
-qE  ( + , _ -> _, qEP)
+q0 ( _ , _ -> $, q1) 
+q1 ( a , _ -> a, foundA) ( = , _ -> _, foundEqualFirst)
+
+foundEqualFirst ( + , _ -> _ , foundEqualPlus) 
+foundEqualPlus ( a, a -> _ , checkA) ( _ , $ -> _, qEP) 
+
+foundA ( a, _ -> a, foundA) ( = , _ -> _ , gotEqual)
+
+gotEqual ( a, a -> _, gotEqual) ( + , _ -> _, gotPlus)
+gotPlus ( a , a -> _, checkA) ( _ , $ -> _ , q2)
+
+checkA ( a , a -> _ , checkA) ( _ , $ -> _ , q2)
+
 qEP ( _ , _ -> _ , qEP)
-q1 ( a , _ -> a , q1) ( = , _ -> _ , q2) 
-q2 ( a , a -> _ , q2) ( + , _ -> _ , q3)
-q3 ( a , a -> _ , q4)( _ , $ -> _ , q4)  
-q4 ( _ , _ -> _ , q4)
+q2 ( _ , _ -> _ , q2)
